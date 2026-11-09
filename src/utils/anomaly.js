@@ -1,4 +1,4 @@
-const API_URL = 'https://apis.divtec.me'
+const API_URL = import.meta.env.VITE_API_URL || 'https://apis.divtec.me'
 
 // Image servie par l'API, avec repli sur les images hébergées par la NASA
 export function imageUrl (anomaly) {
