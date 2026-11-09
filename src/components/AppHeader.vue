@@ -24,6 +24,7 @@
 <script setup>
   const menuItems = [
     { title: 'Accueil', path: '/', icon: 'mdi-home' },
+    { title: 'Favoris', path: '/favoris', icon: 'mdi-heart' },
     { title: 'À propos', path: '/a-propos', icon: 'mdi-information' },
   ]
 </script>

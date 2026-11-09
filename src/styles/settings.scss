@@ -8,3 +8,11 @@
 // @use 'vuetify/settings' with (
 //   $color-pack: false
 // );
+
+// Défini ici (et non dans un <style scoped>) pour rester accessible aux éléments générés par Vuetify
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  25% { transform: scale(1.5); }
+  50% { transform: scale(1.1); }
+  75% { transform: scale(2); }
+}
