@@ -50,6 +50,7 @@ _(Capture d’écran de l’application)_
 ### Installation & Run
 - Cloner le repo : `git clone https://github.com/FilthyMonkeysWhoCantEvenUseJijutsu/294-projet-nasa-mashdan.git`
 - Installer : `npm install`
+- Variables d’environnement : `cp .env.example .env` (contient `VITE_API_URL`)
 - Lancer : `npm run dev`
 - Variables d’environnement : copier `.env.example` → `.env` et compléter les clés nécessaires  
 
@@ -72,12 +73,13 @@ _(Capture d’écran de l’application)_
 - `layouts/default.vue` : en-tête, contenu et pied de page  
 - `pages/` : routes automatiques (`index.vue`, `a-propos.vue`, `anomalies/[id].vue`, `[...path].vue` pour la 404)  
 - `components/` : `AppHeader`, `AppFooter` (slot), `AnomalyCard` (props)  
+- `plugins/axios.js` : instance Axios (`baseURL` lue depuis `VITE_API_URL`)  
 - `stores/anomalyStore.js` : store Pinia (state `anomalies`, `isLoading`, `error` ; getters `totalAnomalies`, `getAnomalyById` ; actions `fetchAnomalies`, `init`)  
 - `utils/anomaly.js` : images, dates, nettoyage des textes de l’API
 Outils utiles : Figma / Draw.io / ...
 
 **Data-flow résumé :**  
-- `App.vue` appelle `anomalyStore.init()` au montage → le **store** charge l’API une seule fois → les pages (liste et détail) lisent le state et le getter `getAnomalyById`.
+- `App.vue` appelle `anomalyStore.init()` au montage → le **store** charge l’API via Axios une seule fois → les pages (liste et détail) lisent le state et le getter `getAnomalyById`.
 
 ---
 
@@ -103,7 +105,8 @@ Outils utiles : Figma / Draw.io / ...
 - ...
 
 ### Tests d’erreurs & fallback
-- API down → **mock fallback** affiché (fichier local ou données simulées)  
+- API down → message d’erreur (`v-alert`) affiché à la place de la grille  
+- Chargement → squelettes (`v-skeleton-loader`) affichés pendant la requête  
 - Liste vide → message clair affiché  
 - Recherche sans résultat → affichage “Aucun élément trouvé”  
 - ...
