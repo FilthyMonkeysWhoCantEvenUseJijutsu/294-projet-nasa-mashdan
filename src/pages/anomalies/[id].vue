@@ -8,8 +8,13 @@
       @click="$router.back()"
     />
 
+    <v-skeleton-loader
+      v-if="anomalyStore.isLoading"
+      type="image, article"
+    />
+
     <v-alert
-      v-if="!anomaly"
+      v-else-if="!anomaly"
       type="error"
       variant="tonal"
     >

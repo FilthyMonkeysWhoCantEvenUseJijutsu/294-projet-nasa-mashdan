@@ -1,4 +1,4 @@
-const API_URL = 'https://apis.divtec.me/api/nasa/anomaly?limit=100'
+import api from '@/plugins/axios'
 
 export const useAnomalyStore = defineStore('anomaly', {
   state: () => ({
@@ -18,30 +18,32 @@ export const useAnomalyStore = defineStore('anomaly', {
   },
 
   actions: {
-    async fetchAnomalies () {
+    async fetchAnomalies ({ withLoader = true } = {}) {
+      if (withLoader) {
+        this.isLoading = true
+      }
+
       try {
-        const response = await fetch(API_URL)
-        if (!response.ok) {
-          throw new Error(`Erreur HTTP : ${response.status}`)
-        }
-        const json = await response.json()
-        this.anomalies = json.data
+        const response = await api.get('/api/nasa/anomaly', { params: { limit: 100 } })
+        this.anomalies = response.data.data
+        this.error = null
       } catch (error) {
+        console.error('Erreur:', error.message)
+        this.anomalies = []
         this.error = error.message
-        throw error
+      } finally {
+        if (withLoader) {
+          this.isLoading = false
+        }
       }
     },
 
     async init () {
       this.isLoading = true
-      this.error = null
       try {
         await Promise.all([
-          this.fetchAnomalies(),
+          this.fetchAnomalies({ withLoader: false }),
         ])
-      } catch (error) {
-        this.error = 'Erreur lors du chargement des données'
-        console.error(error)
       } finally {
         this.isLoading = false
       }
