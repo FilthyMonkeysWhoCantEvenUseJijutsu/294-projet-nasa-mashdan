@@ -71,15 +71,16 @@ _(Capture d’écran de l’application)_
 ### Architecture (Descriptif + schéma simple + data-flow)
 - `App.vue` : racine de l’application  
 - `layouts/default.vue` : en-tête, contenu et pied de page  
-- `pages/` : routes automatiques (`index.vue`, `a-propos.vue`, `anomalies/[id].vue`, `[...path].vue` pour la 404)  
+- `pages/` : routes automatiques (`index.vue` avec recherche, filtre et tri, `a-propos.vue`, `anomalies/[id].vue`, `[...path].vue` pour la 404)  
 - `components/` : `AppHeader`, `AppFooter` (slot), `AnomalyCard` (props)  
 - `plugins/axios.js` : instance Axios (`baseURL` lue depuis `VITE_API_URL`)  
-- `stores/anomalyStore.js` : store Pinia (state `anomalies`, `isLoading`, `error` ; getters `totalAnomalies`, `getAnomalyById` ; actions `fetchAnomalies`, `init`)  
+- `stores/anomalyStore.js` : store Pinia (state `anomalies`, `isLoading`, `error` ; getters `totalAnomalies`, `centers`, `getAnomalyById` ; actions `fetchAnomalies`, `init`)  
 - `utils/anomaly.js` : images, dates, nettoyage des textes de l’API
 Outils utiles : Figma / Draw.io / ...
 
 **Data-flow résumé :**  
-- `App.vue` appelle `anomalyStore.init()` au montage → le **store** charge l’API via Axios une seule fois → les pages (liste et détail) lisent le state et le getter `getAnomalyById`.
+- `App.vue` appelle `anomalyStore.init()` au montage → le **store** charge l’API via Axios une seule fois → les pages (liste et détail) lisent le state et le getter `getAnomalyById`.  
+- Page liste : `anomalies` → `filteredByCenter` (`v-select`) → `filteredBySearch` (`v-text-field`) → `sortedAnomalies` (bouton A → Z / Z → A). Ce sont des `computed` chaînés : les données du store ne sont jamais modifiées.
 
 ---
 
@@ -108,7 +109,7 @@ Outils utiles : Figma / Draw.io / ...
 - API down → message d’erreur (`v-alert`) affiché à la place de la grille  
 - Chargement → squelettes (`v-skeleton-loader`) affichés pendant la requête  
 - Liste vide → message clair affiché  
-- Recherche sans résultat → affichage “Aucun élément trouvé”  
+- Recherche ou filtre sans résultat → message “Aucune anomalie ne correspond à votre recherche ou à votre filtre.”  
 - ...
 
 ---
