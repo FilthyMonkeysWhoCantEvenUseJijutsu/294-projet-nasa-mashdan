@@ -10,6 +10,9 @@ export const useAnomalyStore = defineStore('anomaly', {
   getters: {
     totalAnomalies: state => state.anomalies.length,
 
+    // Centres NASA présents dans les données, sans doublon, triés
+    centers: state => [...new Set(state.anomalies.map(a => a.center))].toSorted(),
+
     getAnomalyById: state => {
       return anomalyId => {
         return state.anomalies.find(a => a.id === Number(anomalyId))

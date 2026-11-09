@@ -21,6 +21,41 @@
           variant="outlined"
         />
       </v-col>
+
+      <!-- Filtre par centre NASA -->
+      <v-col
+        cols="12"
+        md="4"
+        sm="6"
+      >
+        <v-select
+          v-model="selectedCenter"
+          clearable
+          density="compact"
+          hide-details
+          :items="anomalyStore.centers"
+          label="Filtrer par centre"
+          prepend-inner-icon="mdi-filter"
+          variant="outlined"
+        />
+      </v-col>
+
+      <!-- Tri alphabétique : alterne entre A → Z et Z → A -->
+      <v-col
+        class="d-flex align-center"
+        cols="12"
+        md="4"
+      >
+        <v-btn
+          :prepend-icon="sortOrder === 'asc'
+            ? 'mdi-sort-alphabetical-ascending'
+            : 'mdi-sort-alphabetical-descending'"
+          variant="outlined"
+          @click="toggleSort"
+        >
+          Tri {{ sortOrder === 'asc' ? 'A → Z' : 'Z → A' }}
+        </v-btn>
+      </v-col>
     </v-row>
 
     <!-- Squelettes de chargement pendant la requête API -->
@@ -49,18 +84,18 @@
 
     <!-- Message si aucun résultat pour la recherche -->
     <v-alert
-      v-else-if="filteredBySearch.length === 0"
+      v-else-if="sortedAnomalies.length === 0"
       class="mb-6"
       type="info"
       variant="tonal"
     >
-      Aucune anomalie ne correspond à votre recherche.
+      Aucune anomalie ne correspond à votre recherche ou à votre filtre.
     </v-alert>
 
     <!-- Grille de cartes (cas normal) -->
     <v-row v-else>
       <v-col
-        v-for="anomaly in filteredBySearch"
+        v-for="anomaly in sortedAnomalies"
         :key="anomaly.id"
         cols="12"
         lg="3"
@@ -82,15 +117,38 @@
   const apiUrl = import.meta.env.VITE_API_URL || 'https://apis.divtec.me'
 
   const searchQuery = ref('')
+  const selectedCenter = ref(null)
+  const sortOrder = ref('asc')
 
-  // Vue filtrée par titre : ne modifie jamais les données du store
-  const filteredBySearch = computed(() => {
-    if (!searchQuery.value) {
+  // Computed chaînés : anomalies → filteredByCenter → filteredBySearch → sortedAnomalies
+  // Les données du store ne sont jamais modifiées
+
+  const filteredByCenter = computed(() => {
+    if (!selectedCenter.value) {
       return anomalyStore.anomalies
     }
+    return anomalyStore.anomalies.filter(anomaly => anomaly.center === selectedCenter.value)
+  })
+
+  const filteredBySearch = computed(() => {
+    if (!searchQuery.value) {
+      return filteredByCenter.value
+    }
     const query = searchQuery.value.toLowerCase()
-    return anomalyStore.anomalies.filter(anomaly =>
+    return filteredByCenter.value.filter(anomaly =>
       anomaly.title.toLowerCase().includes(query),
     )
   })
+
+  // toSorted() renvoie une copie triée : le résultat filtré n'est pas modifié
+  const sortedAnomalies = computed(() => {
+    return filteredBySearch.value.toSorted((a, b) => {
+      const comparison = a.title.localeCompare(b.title, 'fr')
+      return sortOrder.value === 'asc' ? comparison : -comparison
+    })
+  })
+
+  function toggleSort () {
+    sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc'
+  }
 </script>
