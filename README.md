@@ -72,11 +72,12 @@ _(Capture d’écran de l’application)_
 - `layouts/default.vue` : en-tête, contenu et pied de page  
 - `pages/` : routes automatiques (`index.vue`, `a-propos.vue`, `anomalies/[id].vue`, `[...path].vue` pour la 404)  
 - `components/` : `AppHeader`, `AppFooter` (slot), `AnomalyCard` (props)  
+- `stores/anomalyStore.js` : store Pinia (state `anomalies`, `isLoading`, `error` ; getters `totalAnomalies`, `getAnomalyById` ; actions `fetchAnomalies`, `init`)  
 - `utils/anomaly.js` : images, dates, nettoyage des textes de l’API
 Outils utiles : Figma / Draw.io / ...
 
 **Data-flow résumé :**  
-- Vue déclenche un **event utilisateur** → composant appelle une fonction du **store** → ...
+- `App.vue` appelle `anomalyStore.init()` au montage → le **store** charge l’API une seule fois → les pages (liste et détail) lisent le state et le getter `getAnomalyById`.
 
 ---
 
