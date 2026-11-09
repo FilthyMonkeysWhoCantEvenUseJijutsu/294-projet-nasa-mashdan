@@ -3,9 +3,9 @@
 ## 1. 🎨 Présentation du projet
 
 ### Concept
-- API choisie et pourquoi  
-- Public cible  
-- Objectifs de l’application  
+- API choisie : anomalies de la base de données de la NASA (`apis.divtec.me`), données riches (images, dates, centres, mots-clés)  
+- Public cible : curieux d’astronomie et d’espace  
+- Objectifs de l’application : parcourir les anomalies et consulter le détail de chacune  
 
 ### Fonctionnalités principales
 - Affichage d’une liste d’éléments (via API)
@@ -48,9 +48,9 @@ _(Capture d’écran de l’application)_
 - **Gestion API Keys** : `.env` + `.env.example`
 
 ### Installation & Run
-- Cloner le repo :...
-- Installer :... 
-- Lancer :...
+- Cloner le repo : `git clone https://github.com/FilthyMonkeysWhoCantEvenUseJijutsu/294-projet-nasa-mashdan.git`
+- Installer : `npm install`
+- Lancer : `npm run dev`
 - Variables d’environnement : copier `.env.example` → `.env` et compléter les clés nécessaires  
 
 ### Méthodologie
@@ -62,15 +62,17 @@ _(Capture d’écran de l’application)_
 - ...
 
 ### Choix techniques
-- API sélectionnée :  
-- Justification du choix :  
-- Endpoints utilisés :  
+- API sélectionnée : NASA Anomalies (`https://apis.divtec.me/api/nasa/anomaly`)  
+- Justification du choix : données variées avec images et textes, pas de clé d’API  
+- Endpoints utilisés : `GET /api/nasa/anomaly?limit=100`  
 - Limites/quotas connus :  
 
 ### Architecture (Descriptif + schéma simple + data-flow)
-- `App.vue` : layout principal  
-- `views/` : pages (liste, détail, favoris)  
-- ...
+- `App.vue` : racine de l’application  
+- `layouts/default.vue` : en-tête, contenu et pied de page  
+- `pages/` : routes automatiques (`index.vue`, `a-propos.vue`, `anomalies/[id].vue`, `[...path].vue` pour la 404)  
+- `components/` : `AppHeader`, `AppFooter` (slot), `AnomalyCard` (props)  
+- `utils/anomaly.js` : images, dates, nettoyage des textes de l’API
 Outils utiles : Figma / Draw.io / ...
 
 **Data-flow résumé :**  
