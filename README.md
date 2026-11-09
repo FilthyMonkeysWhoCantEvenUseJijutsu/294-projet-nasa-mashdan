@@ -71,15 +71,15 @@ _(Capture d’écran de l’application)_
 ### Architecture (Descriptif + schéma simple + data-flow)
 - `App.vue` : racine de l’application  
 - `layouts/default.vue` : en-tête, contenu et pied de page  
-- `pages/` : routes automatiques (`index.vue` avec recherche, filtre et tri, `a-propos.vue`, `anomalies/[id].vue`, `[...path].vue` pour la 404)  
-- `components/` : `AppHeader`, `AppFooter` (slot), `AnomalyCard` (props)  
+- `pages/` : routes automatiques (`index.vue` avec recherche, filtre et tri, `favoris.vue`, `a-propos.vue`, `anomalies/[id].vue`, `[...path].vue` pour la 404)  
+- `components/` : `AppHeader`, `AppFooter` (slot), `AnomalyCard` (props, bouton favori avec `@click.stop.prevent`, snackbar de confirmation)  
 - `plugins/axios.js` : instance Axios (`baseURL` lue depuis `VITE_API_URL`)  
-- `stores/anomalyStore.js` : store Pinia (state `anomalies`, `isLoading`, `error` ; getters `totalAnomalies`, `centers`, `getAnomalyById` ; actions `fetchAnomalies`, `init`)  
+- `stores/anomalyStore.js` : store Pinia (state `anomalies`, `isLoading`, `error` ; state `favorites` (IDs) ; getters `totalAnomalies`, `centers`, `getAnomalyById`, `totalFavorites`, `isFavorite`, `getFavorites` ; actions `fetchAnomalies`, `init`, `toggleFavorite`, `loadFavorites`, `saveFavorites`, `cleanupFavorites`)  
 - `utils/anomaly.js` : images, dates, nettoyage des textes de l’API
 Outils utiles : Figma / Draw.io / ...
 
 **Data-flow résumé :**  
-- `App.vue` appelle `anomalyStore.init()` au montage → le **store** charge l’API via Axios une seule fois → les pages (liste et détail) lisent le state et le getter `getAnomalyById`.  
+- `App.vue` appelle `anomalyStore.init()` au montage → le **store** charge l’API via Axios une seule fois → les pages (liste, détail, favoris) lisent le state et les getters. Les favoris sont rechargés depuis `localStorage` (clé `anomaly_favorites`) dans `init()`, puis sauvegardés à chaque `toggleFavorite`.  
 - Page liste : `anomalies` → `filteredByCenter` (`v-select`) → `filteredBySearch` (`v-text-field`) → `sortedAnomalies` (bouton A → Z / Z → A). Ce sont des `computed` chaînés : les données du store ne sont jamais modifiées.
 
 ---
@@ -88,7 +88,7 @@ Outils utiles : Figma / Draw.io / ...
 
 ### Tests techniques
 - ✅ Appels API fonctionnels  
-- ✅ Persistance vérifiée après refresh (localStorage)  
+- ✅ Persistance des favoris vérifiée après refresh (`localStorage`, clé `anomaly_favorites`)  
 - ✅ Navigation entre les vues OK  
 - ...
 
@@ -108,7 +108,7 @@ Outils utiles : Figma / Draw.io / ...
 ### Tests d’erreurs & fallback
 - API down → message d’erreur (`v-alert`) affiché à la place de la grille  
 - Chargement → squelettes (`v-skeleton-loader`) affichés pendant la requête  
-- Liste vide → message clair affiché  
+- Liste vide → message clair affiché (aucun favori : “Vous n'avez pas encore d'anomalies favorites.”)  
 - Recherche ou filtre sans résultat → message “Aucune anomalie ne correspond à votre recherche ou à votre filtre.”  
 - ...
 
