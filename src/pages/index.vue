@@ -6,7 +6,7 @@
 
     <v-row>
       <v-col
-        v-for="anomaly in anomalies"
+        v-for="anomaly in anomalyStore.anomalies"
         :key="anomaly.id"
         cols="12"
         lg="3"
@@ -20,12 +20,7 @@
 </template>
 
 <script setup>
-  const anomalies = ref([])
+  import { useAnomalyStore } from '@/stores/anomalyStore'
 
-  onMounted(async () => {
-    const response = await fetch('https://apis.divtec.me/api/nasa/anomaly?limit=100')
-    const json = await response.json()
-    anomalies.value = json.data
-    console.log('Anomalies chargées :', anomalies.value)
-  })
+  const anomalyStore = useAnomalyStore()
 </script>

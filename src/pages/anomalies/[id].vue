@@ -72,17 +72,12 @@
 </template>
 
 <script setup>
+  import { useAnomalyStore } from '@/stores/anomalyStore'
   import { formatDate, imageUrl, parseKeywords, plainText } from '@/utils/anomaly'
 
   const route = useRoute()
+  const anomalyStore = useAnomalyStore()
 
-  const anomalies = ref([])
-  const anomaly = computed(() => anomalies.value.find(a => a.id === Number(route.params.id)))
+  const anomaly = computed(() => anomalyStore.getAnomalyById(route.params.id))
   const keywords = computed(() => parseKeywords(anomaly.value?.keywords).slice(0, 8))
-
-  onMounted(async () => {
-    const response = await fetch('https://apis.divtec.me/api/nasa/anomaly?limit=100')
-    const json = await response.json()
-    anomalies.value = json.data
-  })
 </script>
