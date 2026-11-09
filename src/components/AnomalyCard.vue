@@ -1,5 +1,8 @@
 <template>
-  <v-card class="h-100">
+  <v-card
+    class="h-100"
+    :to="`/anomalies/${anomaly.id}`"
+  >
     <v-img
       cover
       height="200"

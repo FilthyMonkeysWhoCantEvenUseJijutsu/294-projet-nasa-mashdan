@@ -16,3 +16,15 @@ export function fallbackImageUrl (anomaly) {
 export function formatDate (date) {
   return new Date(date).toLocaleDateString('fr-CH', { dateStyle: 'long' })
 }
+
+// Les descriptions contiennent du HTML (<a>, &quot;...) : on garde le texte seul
+export function plainText (html) {
+  const doc = new DOMParser().parseFromString(html ?? '', 'text/html')
+  return (doc.body.textContent ?? '').replace(/\s+/g, ' ').trim()
+}
+
+// keywords arrive sous la forme ["mot1,mot2,mot3"]
+export function parseKeywords (keywords) {
+  const list = (keywords ?? []).flatMap(k => k.split(',')).map(k => k.trim()).filter(Boolean)
+  return [...new Set(list)]
+}
