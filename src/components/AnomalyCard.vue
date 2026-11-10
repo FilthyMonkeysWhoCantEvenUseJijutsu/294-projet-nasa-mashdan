@@ -1,6 +1,6 @@
 <template>
   <v-card
-    class="h-100 d-flex flex-column"
+    class="anomaly-card h-100 d-flex flex-column"
     :to="`/anomalies/${anomaly.id}`"
   >
     <v-img
@@ -61,6 +61,25 @@
 </script>
 
 <style scoped>
+  .anomaly-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .anomaly-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .anomaly-card {
+      transition: none;
+    }
+
+    .anomaly-card:hover {
+      transform: none;
+    }
+  }
+
   .favorite-active {
     animation: heartbeat 0.6s ease-in-out;
   }

@@ -1,8 +1,23 @@
 <template>
   <v-container>
-    <h1 class="text-h4 my-6">
+    <h1 class="text-h4 font-weight-bold mt-6 mb-1">
       Anomalies NASA
     </h1>
+    <p
+      v-if="anomalyStore.totalAnomalies > 0"
+      class="text-body-2 text-medium-emphasis mb-6"
+    >
+      <template v-if="sortedAnomalies.length === anomalyStore.totalAnomalies">
+        {{ anomalyStore.totalAnomalies }} anomalies
+      </template>
+      <template v-else>
+        {{ sortedAnomalies.length }} sur {{ anomalyStore.totalAnomalies }} anomalies
+      </template>
+    </p>
+    <div
+      v-else
+      class="mb-6"
+    />
 
     <!-- Barre de recherche : v-model lie le champ au ref searchQuery -->
     <v-row class="mb-4">

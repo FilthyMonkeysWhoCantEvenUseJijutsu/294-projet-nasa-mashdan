@@ -1,5 +1,8 @@
 <template>
-  <v-app-bar flat>
+  <v-app-bar
+    border="b"
+    flat
+  >
     <v-container class="d-flex align-center">
       <v-avatar
         class="mr-3 cursor-pointer"
@@ -7,7 +10,9 @@
         @click="$router.push('/')"
       />
 
-      <v-toolbar-title>EVENTIDE</v-toolbar-title>
+      <v-toolbar-title class="app-title">
+        EVENTIDE
+      </v-toolbar-title>
 
       <v-btn
         v-for="link in menuItems"
@@ -27,3 +32,10 @@
     { title: 'À propos', path: '/a-propos', icon: 'mdi-information' },
   ]
 </script>
+
+<style scoped>
+  .app-title {
+    font-weight: 700;
+    letter-spacing: 0.18em;
+  }
+</style>
