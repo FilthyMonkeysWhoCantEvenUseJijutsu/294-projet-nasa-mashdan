@@ -46,8 +46,15 @@ export const useAnomalyStore = defineStore('anomaly', {
       }
 
       try {
-        const response = await api.get('/api/nasa/anomaly', { params: { limit: 100 } })
-        this.anomalies = response.data.data
+        // L'API est paginée (100 par page) : on charge la page 1, puis les autres en parallèle
+        const params = { limit: 100 }
+        const first = await api.get('/api/nasa/anomaly', { params: { ...params, page: 1 } })
+        const otherPages = await Promise.all(
+          Array.from({ length: first.data.pagination.pages - 1 }, (_, i) =>
+            api.get('/api/nasa/anomaly', { params: { ...params, page: i + 2 } }),
+          ),
+        )
+        this.anomalies = [first, ...otherPages].flatMap(response => response.data.data)
         this.error = null
         this.cleanupFavorites()
       } catch (error) {
@@ -66,9 +73,7 @@ export const useAnomalyStore = defineStore('anomaly', {
       // Favoris chargés avant l'API : cleanupFavorites() peut ensuite retirer les obsolètes
       this.loadFavorites()
       try {
-        await Promise.all([
-          this.fetchAnomalies({ withLoader: false }),
-        ])
+        await this.fetchAnomalies({ withLoader: false })
       } finally {
         this.isLoading = false
       }
