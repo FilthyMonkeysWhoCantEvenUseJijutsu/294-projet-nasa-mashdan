@@ -121,7 +121,7 @@
 ### IA utilisée
 - **Nom** : Claude
 - **Version** : Claude Sonnet 5.5
-- **Contexte** : Génération de code étape par étape (suivi de l’exercice), debugging et rédaction de la documentation  
+- **Contexte** : Aide importante de l’IA (voir les pourcentages ci-dessous), création du code étape par étape en suivant l’exercice, debugging et documentation  
 
 ### Utilisation détaillée
 **Domaines d'aide :**
@@ -132,8 +132,8 @@
 - Recherche d’idées : 40% 
 
 **Compréhension et adaptation**
-- Le code généré suit l’exercice « Pokédex Vuetify » : store Pinia, `computed` chaînés pour la recherche / le filtre / le tri, favoris persistés avec `localStorage`.
-- Adaptation au projet : les Pokémon deviennent des anomalies NASA, le filtre par type devient un filtre par centre NASA, le tri et la recherche portent sur le titre, et les descriptions HTML de l’API sont nettoyées (`plainText`).
+- Le code a été fait avec l’aide de l’IA en suivant l’exercice « Pokédex Vuetify » (store Pinia, recherche / filtre / tri, favoris avec `localStorage`), dans les proportions indiquées ci-dessus, puis testé par moi dans le navigateur.
+- Il a été adapté au projet : anomalies NASA à la place des Pokémon, filtre par centre NASA à la place du filtre par type.
 
 ### Parties codées manuellement
 - Composants principaux : 20% personnel  
