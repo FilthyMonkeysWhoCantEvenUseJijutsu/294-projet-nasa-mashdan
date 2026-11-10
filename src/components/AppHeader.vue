@@ -3,12 +3,11 @@
     <v-container class="d-flex align-center">
       <v-avatar
         class="mr-3 cursor-pointer"
-        color="primary"
-        icon="mdi-rocket-launch"
+        image="@/assets/eventide-logo.png"
         @click="$router.push('/')"
       />
 
-      <v-toolbar-title>NASA Anomalies</v-toolbar-title>
+      <v-toolbar-title>EVENTIDE</v-toolbar-title>
 
       <v-btn
         v-for="link in menuItems"
